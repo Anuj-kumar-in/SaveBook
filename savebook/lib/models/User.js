@@ -56,8 +56,12 @@ const UserSchema = new Schema({
             used: { type: Boolean, default: false }
         }
     ],
-
-
+    bookmarks: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Notes",
+    },
+  ],
 });
 
 // Password hashing middleware
