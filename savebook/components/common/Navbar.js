@@ -80,17 +80,17 @@ export default function Navbar() {
         SaveBook
       </Link>
     ),
-    []
+    [],
   );
 
   const navSurface = clsx(
     "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-    isScrolled ? "pt-2" : "pt-4"
+    isScrolled ? "pt-2" : "pt-4",
   );
 
   const navInner = clsx(
     "site-container flex items-center justify-between rounded-full px-4 py-3 md:px-5",
-    isScrolled ? "glass-panel" : "border border-transparent bg-transparent"
+    isScrolled ? "glass-panel" : "border border-transparent bg-transparent",
   );
 
   const navLinkClass = "text-sm font-medium text-[color:var(--muted)] hover:text-[color:var(--foreground)]";
@@ -112,6 +112,7 @@ export default function Navbar() {
           {isAuthenticated && (
             <>
               <Link href="/notes" className={navLinkClass}>Notes</Link>
+              <Link href="/bookmarks" className={navLinkClass}>Bookmarks</Link>
               <Link href="/profile" className={navLinkClass}>Profile</Link>
               <Link href="/docs" className={navLinkClass}>Docs</Link>
             </>
@@ -142,9 +143,32 @@ export default function Navbar() {
                     <p className="mt-1 text-sm text-[color:var(--muted)]">{user?.email || "Signed in"}</p>
                   </div>
                   <div className="mt-2 grid gap-1">
-                    <Link href="/notes" className="rounded-2xl px-4 py-3 text-sm text-[color:var(--foreground)] hover:bg-[color:var(--background-strong)]" onClick={closeMenus}>My Notes</Link>
-                    <Link href="/profile" className="rounded-2xl px-4 py-3 text-sm text-[color:var(--foreground)] hover:bg-[color:var(--background-strong)]" onClick={closeMenus}>Edit Profile</Link>
-                    <button type="button" onClick={logout} className="rounded-2xl px-4 py-3 text-left text-sm text-red-500 hover:bg-[color:var(--background-strong)]">
+                    <Link
+                      href="/notes"
+                      className="rounded-2xl px-4 py-3 text-sm text-[color:var(--foreground)] hover:bg-[color:var(--background-strong)]"
+                      onClick={closeMenus}
+                    >
+                      My Notes
+                    </Link>
+                    <Link
+                      href="/bookmarks"
+                      className="rounded-2xl px-4 py-3 text-sm text-[color:var(--foreground)] hover:bg-[color:var(--background-strong)]"
+                      onClick={closeMenus}
+                    >
+                      Saved Bookmarks
+                    </Link>
+                    <Link
+                      href="/profile"
+                      className="rounded-2xl px-4 py-3 text-sm text-[color:var(--foreground)] hover:bg-[color:var(--background-strong)]"
+                      onClick={closeMenus}
+                    >
+                      Edit Profile
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={logout}
+                      className="rounded-2xl px-4 py-3 text-left text-sm text-red-500 hover:bg-[color:var(--background-strong)]"
+                    >
                       Logout
                     </button>
                   </div>
@@ -179,6 +203,7 @@ export default function Navbar() {
             <div className="grid gap-2">
               {(!loading && !isAuthenticated ? PUBLIC_NAV_LINKS : [
                 { href: "/notes", label: "Notes" },
+                { href: "/bookmarks", label: "Bookmarks" },
                 { href: "/profile", label: "Profile" },
                 { href: "/docs", label: "Docs" },
               ]).map((link) => (
