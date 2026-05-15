@@ -14,7 +14,7 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <Link
               href="/"
-              className="text-2xl font-bold text-black inline-block mb-4"
+              className="text-2xl font-bold text-[color:var(--foreground)] inline-block mb-4"
             >
               SaveBook
             </Link>
@@ -69,7 +69,7 @@ export default function Footer() {
 
           {/* Product */}
           <div>
-            <h3 className="text-sm font-semibold text-black uppercase tracking-wider mb-3">
+            <h3 className="text-sm font-semibold text-[color:var(--foreground)] uppercase tracking-wider mb-3">
               Product
             </h3>
             <ul className="space-y-2">
@@ -110,7 +110,7 @@ export default function Footer() {
 
           {/* Resources */}
           <div>
-            <h3 className="text-sm font-semibold text-black uppercase tracking-wider mb-3">
+            <h3 className="text-sm font-semibold text-[color:var(--foreground)] uppercase tracking-wider mb-3">
               Resources
             </h3>
             <ul className="space-y-2">
@@ -163,7 +163,7 @@ export default function Footer() {
 
           {/* Community */}
           <div>
-            <h3 className="text-sm font-semibold text-black uppercase tracking-wider mb-3">
+            <h3 className="text-sm font-semibold text-[color:var(--foreground)] uppercase tracking-wider mb-3">
               Community
             </h3>
             <ul className="space-y-2">
@@ -226,7 +226,7 @@ export default function Footer() {
 
           {/* Newsletter */}
           <div className="lg:col-span-2">
-            <h3 className="text-3xl font-bold text-black mb-3 text-center lg:text-left">
+            <h3 className="text-3xl font-bold text-[color:var(--foreground)] mb-3 text-center lg:text-left">
               Stay Updated
             </h3>
 
@@ -235,25 +235,41 @@ export default function Footer() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <label htmlFor="newsletter-email" className="sr-only">
-                Email address
-              </label>
+  <label htmlFor="newsletter-email" className="sr-only">
+    Email address
+  </label>
 
-              <input
-                id="newsletter-email"
-                type="email"
-                placeholder="Enter your email"
-                aria-label="Email address"
-                className="flex-1 px-5 py-3 rounded-lg border border-[#334155] bg-[#16253d] text-white placeholder:text-[color:var(--muted)] text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+  <input
+    id="newsletter-email"
+    type="email"
+    placeholder="Enter your email"
+    aria-label="Email address"
+    className="
+      flex-1 px-5 py-3 rounded-2xl
+      border border-[var(--border)]
+      bg-[color:var(--background-elevated)]
+      text-[color:var(--foreground)]
+      placeholder:text-[color:var(--muted)]
+      text-sm
+      shadow-[0_10px_30px_rgba(0,0,0,0.06)]
+      focus:outline-none focus:ring-2 focus:ring-blue-500
+    "
+  />
 
-              <button
-                type="button"
-                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                Subscribe
-              </button>
-            </div>
+  <button
+    type="button"
+    className="
+      px-6 py-3 rounded-2xl
+      bg-blue-600 hover:bg-blue-700
+      text-white text-sm font-semibold
+      shadow-[0_10px_30px_rgba(59,130,246,0.3)]
+      transition-colors
+      focus:outline-none focus:ring-2 focus:ring-blue-500
+    "
+  >
+    Subscribe
+  </button>
+</div>
           </div>
         </div>
 
