@@ -6,7 +6,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#06152d] border-t border-[#1b2b45] text-white transition-colors duration-300">
+    <footer className="border-t border-[var(--border)] bg-[color:var(--background)] text-[color:var(--foreground)] transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-10">
@@ -14,12 +14,12 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <Link
               href="/"
-              className="text-2xl font-bold text-white inline-block mb-4"
+              className="text-2xl font-bold text-black inline-block mb-4"
             >
               SaveBook
             </Link>
 
-            <p className="text-[#94a3b8] text-sm mb-5 leading-relaxed max-w-md">
+            <p className="text-[color:var(--muted)] text-sm mb-5 leading-relaxed max-w-md">
               A modern, open-source note-taking and knowledge management
               platform built for developers and creators.
             </p>
@@ -31,7 +31,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Visit SaveBook GitHub Repository"
-                className="text-[#94a3b8] hover:text-white transition-colors rounded-md p-1.5"
+                className="text-[color:var(--muted)] hover:text-white transition-colors rounded-md p-1.5"
               >
                 <svg
                   className="h-5 w-5"
@@ -53,7 +53,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Follow SaveBook on Twitter"
-                className="text-[#94a3b8] hover:text-white transition-colors rounded-md p-1.5"
+                className="text-[color:var(--muted)] hover:text-white transition-colors rounded-md p-1.5"
               >
                 <svg
                   className="h-5 w-5"
@@ -69,14 +69,14 @@ export default function Footer() {
 
           {/* Product */}
           <div>
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-3">
+            <h3 className="text-sm font-semibold text-black uppercase tracking-wider mb-3">
               Product
             </h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/"
-                  className="text-sm text-[#94a3b8] hover:text-white transition-colors"
+                  className="text-sm text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
                 >
                   Home
                 </Link>
@@ -84,7 +84,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/notes"
-                  className="text-sm text-[#94a3b8] hover:text-white transition-colors"
+                  className="text-sm text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
                 >
                   Notes
                 </Link>
@@ -92,7 +92,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/profile"
-                  className="text-sm text-[#94a3b8] hover:text-white transition-colors"
+                  className="text-sm text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
                 >
                   Profile
                 </Link>
@@ -100,7 +100,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/share"
-                  className="text-sm text-[#94a3b8] hover:text-white transition-colors"
+                  className="text-sm text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
                 >
                   Share Notes
                 </Link>
@@ -110,14 +110,14 @@ export default function Footer() {
 
           {/* Resources */}
           <div>
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-3">
+            <h3 className="text-sm font-semibold text-black uppercase tracking-wider mb-3">
               Resources
             </h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/faq"
-                  className="text-sm text-[#94a3b8] hover:text-white transition-colors"
+                  className="text-sm text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
                 >
                   FAQ
                 </Link>
@@ -125,7 +125,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/docs"
-                  className="text-sm text-[#94a3b8] hover:text-white transition-colors"
+                  className="text-sm text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
                 >
                   Documentation
                 </Link>
@@ -135,7 +135,7 @@ export default function Footer() {
                   href="https://github.com/HarshYadav152/SaveBook/issues"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[#94a3b8] hover:text-white transition-colors"
+                  className="text-sm text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
                 >
                   Issues
                 </a>
@@ -145,7 +145,7 @@ export default function Footer() {
                   href="https://github.com/HarshYadav152/SaveBook/discussions"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[#94a3b8] hover:text-white transition-colors"
+                  className="text-sm text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
                 >
                   Discussions
                 </a>
@@ -153,7 +153,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/contact"
-                  className="text-sm text-[#94a3b8] hover:text-white transition-colors"
+                  className="text-sm text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
                 >
                   Contact
                 </Link>
@@ -163,7 +163,7 @@ export default function Footer() {
 
           {/* Community */}
           <div>
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-3">
+            <h3 className="text-sm font-semibold text-black uppercase tracking-wider mb-3">
               Community
             </h3>
             <ul className="space-y-2">
@@ -172,7 +172,7 @@ export default function Footer() {
                   href="https://github.com/HarshYadav152/SaveBook/graphs/contributors"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[#94a3b8] hover:text-white transition-colors"
+                  className="text-sm text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
                 >
                   Contributors
                 </a>
@@ -182,7 +182,7 @@ export default function Footer() {
                   href="https://github.com/HarshYadav152/SaveBook/blob/main/CONTRIBUTING.md"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[#94a3b8] hover:text-white transition-colors"
+                  className="text-sm text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
                 >
                   Contributing
                 </a>
@@ -192,7 +192,7 @@ export default function Footer() {
                   href="https://github.com/HarshYadav152/SaveBook/blob/main/CODE_OF_CONDUCT.md"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[#94a3b8] hover:text-white transition-colors"
+                  className="text-sm text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
                 >
                   Code of Conduct
                 </a>
@@ -200,7 +200,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/privacy"
-                  className="text-sm text-[#94a3b8] hover:text-white transition-colors"
+                  className="text-sm text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
                 >
                   Privacy Policy
                 </Link>
@@ -208,7 +208,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/terms"
-                  className="text-sm text-[#94a3b8] hover:text-white transition-colors"
+                  className="text-sm text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
                 >
                   Terms of Service
                 </Link>
@@ -216,7 +216,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/licence"
-                  className="text-sm text-[#94a3b8] hover:text-white transition-colors"
+                  className="text-sm text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
                 >
                   MIT License
                 </Link>
@@ -226,11 +226,11 @@ export default function Footer() {
 
           {/* Newsletter */}
           <div className="lg:col-span-2">
-            <h3 className="text-3xl font-bold text-white mb-3 text-center lg:text-left">
+            <h3 className="text-3xl font-bold text-black mb-3 text-center lg:text-left">
               Stay Updated
             </h3>
 
-            <p className="text-[#94a3b8] text-base mb-6 text-center lg:text-left">
+            <p className="text-[color:var(--muted)] text-base mb-6 text-center lg:text-left">
               Get the latest updates on new features and improvements.
             </p>
 
@@ -244,7 +244,7 @@ export default function Footer() {
                 type="email"
                 placeholder="Enter your email"
                 aria-label="Email address"
-                className="flex-1 px-5 py-3 rounded-lg border border-[#334155] bg-[#16253d] text-white placeholder:text-[#94a3b8] text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-5 py-3 rounded-lg border border-[#334155] bg-[#16253d] text-white placeholder:text-[color:var(--muted)] text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
 
               <button
@@ -259,7 +259,7 @@ export default function Footer() {
 
         {/* Bottom Section */}
         <div className="pt-6 border-t border-[#1b2b45]">
-          <div className="flex flex-col lg:flex-row justify-between items-center gap-4 text-sm text-[#94a3b8]">
+          <div className="flex flex-col lg:flex-row justify-between items-center gap-4 text-sm text-[color:var(--muted)]">
             <div className="flex flex-col md:flex-row items-center gap-6">
               <p>&copy; {currentYear} SaveBook. All rights reserved.</p>
 
@@ -276,7 +276,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Contribute on GitHub"
-                className="text-[#94a3b8] hover:text-white transition-colors"
+                className="text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
               >
                 <svg
                   className="h-5 w-5"
