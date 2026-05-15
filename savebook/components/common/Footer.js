@@ -235,9 +235,9 @@ export default function Footer() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <label htmlFor="newsletter-email" className="sr-only">
-                Email address
-              </label>
+  <label htmlFor="newsletter-email" className="sr-only">
+    Email address
+  </label>
 
               <input
                 id="newsletter-email"
@@ -246,14 +246,37 @@ export default function Footer() {
                 aria-label="Email address"
                 className="flex-1 px-5 py-3 rounded-lg border border-[#334155] bg-[color:var(--background-elevated)] text-white placeholder:text-[color:var(--muted)] text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+  <input
+    id="newsletter-email"
+    type="email"
+    placeholder="Enter your email"
+    aria-label="Email address"
+    className="
+      flex-1 px-5 py-3 rounded-2xl
+      border border-[var(--border)]
+      bg-[color:var(--background-elevated)]
+      text-[color:var(--foreground)]
+      placeholder:text-[color:var(--muted)]
+      text-sm
+      shadow-[0_10px_30px_rgba(0,0,0,0.06)]
+      focus:outline-none focus:ring-2 focus:ring-blue-500
+    "
+  />
 
-              <button
-                type="button"
-                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                Subscribe
-              </button>
-            </div>
+  <button
+    type="button"
+    className="
+      px-6 py-3 rounded-2xl
+      bg-blue-600 hover:bg-blue-700
+      text-white text-sm font-semibold
+      shadow-[0_10px_30px_rgba(59,130,246,0.3)]
+      transition-colors
+      focus:outline-none focus:ring-2 focus:ring-blue-500
+    "
+  >
+    Subscribe
+  </button>
+</div>
           </div>
         </div>
 
