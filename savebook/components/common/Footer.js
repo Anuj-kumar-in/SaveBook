@@ -14,7 +14,7 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <Link
               href="/"
-              className="text-2xl font-bold text-black inline-block mb-4"
+              className="text-2xl font-bold text-[color:var(--foreground)] inline-block mb-4"
             >
               SaveBook
             </Link>
@@ -69,7 +69,7 @@ export default function Footer() {
 
           {/* Product */}
           <div>
-            <h3 className="text-sm font-semibold text-black uppercase tracking-wider mb-3">
+            <h3 className="text-sm font-semibold text-[color:var(--foreground)] uppercase tracking-wider mb-3">
               Product
             </h3>
             <ul className="space-y-2">
@@ -110,7 +110,7 @@ export default function Footer() {
 
           {/* Resources */}
           <div>
-            <h3 className="text-sm font-semibold text-black uppercase tracking-wider mb-3">
+            <h3 className="text-sm font-semibold text-[color:var(--foreground)] uppercase tracking-wider mb-3">
               Resources
             </h3>
             <ul className="space-y-2">
@@ -163,7 +163,7 @@ export default function Footer() {
 
           {/* Community */}
           <div>
-            <h3 className="text-sm font-semibold text-black uppercase tracking-wider mb-3">
+            <h3 className="text-sm font-semibold text-[color:var(--foreground)] uppercase tracking-wider mb-3">
               Community
             </h3>
             <ul className="space-y-2">
@@ -226,7 +226,7 @@ export default function Footer() {
 
           {/* Newsletter */}
           <div className="lg:col-span-2">
-            <h3 className="text-3xl font-bold text-black mb-3 text-center lg:text-left">
+            <h3 className="text-3xl font-bold text-[color:var(--foreground)] mb-3 text-center lg:text-left">
               Stay Updated
             </h3>
 
@@ -244,7 +244,7 @@ export default function Footer() {
                 type="email"
                 placeholder="Enter your email"
                 aria-label="Email address"
-                className="flex-1 px-5 py-3 rounded-lg border border-[#334155] bg-[#16253d] text-white placeholder:text-[color:var(--muted)] text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-5 py-3 rounded-lg border border-[#334155] bg-[color:var(--background-elevated)] text-white placeholder:text-[color:var(--muted)] text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
 
               <button
@@ -258,7 +258,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="pt-6 border-t border-[#1b2b45]">
+        <div className="pt-6 border-t border-[var(--border)]">
           <div className="flex flex-col lg:flex-row justify-between items-center gap-4 text-sm text-[color:var(--muted)]">
             <div className="flex flex-col md:flex-row items-center gap-6">
               <p>&copy; {currentYear} SaveBook. All rights reserved.</p>
