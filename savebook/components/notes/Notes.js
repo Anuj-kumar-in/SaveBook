@@ -1,6 +1,7 @@
 "use client"
 import noteContext from '@/context/noteContext';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import React, { useContext, useEffect, useState, Suspense } from 'react'
 import toast from 'react-hot-toast';
 import Addnote from './AddNote';
@@ -44,6 +45,7 @@ export default function Notes() {
     const [selectedTag, setSelectedTag] = useState('all');
     const [saveStatus, setSaveStatus] = useState('idle'); // 'idle', 'saving', 'saved', 'error'
     const [isAutoSaving, setIsAutoSaving] = useState(false);
+    const [activeTab, setActiveTab] = useState('notes');
 
     useEffect(() => {
         if (isAuthenticated && !loading) {
@@ -66,11 +68,15 @@ export default function Notes() {
 
     // Filter notes based on search and tag
     const filteredNotes = notes.filter(note => {
+        const matchesType = activeTab === 'whiteboards' ? note.isWhiteboard : !note.isWhiteboard;
         const matchesSearch = note.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             note.description?.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesTag = selectedTag === 'all' || note.tag === selectedTag;
-        return matchesSearch && matchesTag;
+        return matchesType && matchesSearch && matchesTag;
     });
+
+    const totalNotes = notes.filter(note => !note.isWhiteboard).length;
+    const totalWhiteboards = notes.filter(note => note.isWhiteboard).length;
 
     const updateNote = (currentNote) => {
         setNote({
@@ -553,117 +559,167 @@ export default function Notes() {
                     </p>
                 </div>
 
-                {/* Search and Filter Section */}
-                <div className="bg-gray-900 rounded-2xl border border-gray-700 p-6 mb-8">
-                    <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
-                        {/* Search Input */}
-                        <div className="flex-1 w-full lg:max-w-md">
-                            <div className="relative">
-                                <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg>
-                                <input
-                                    type="text"
-                                    placeholder="Search notes..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none"
-                                />
+                <div className="lg:flex lg:items-start lg:gap-8">
+                    <div className="flex-1">
+                        {/* Search and Filter Section */}
+                        <div className="bg-gray-900 rounded-2xl border border-gray-700 p-6 mb-8">
+                            <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+                                {/* Search Input */}
+                                <div className="flex-1 w-full lg:max-w-md">
+                                    <div className="relative">
+                                        <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        </svg>
+                                        <input
+                                            type="text"
+                                            placeholder={activeTab === 'whiteboards' ? "Search whiteboards..." : "Search notes..."}
+                                            value={searchTerm}
+                                            onChange={(e) => setSearchTerm(e.target.value)}
+                                            className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none"
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Tag Filter */}
+                                <div className="flex flex-wrap gap-2">
+                                    <button
+                                        onClick={() => setSelectedTag('all')}
+                                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${selectedTag === 'all'
+                                                ? 'bg-blue-600 text-white'
+                                                : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                                            }`}
+                                    >
+                                        All
+                                    </button>
+                                    {tagOptions.map(tag => (
+                                        <button
+                                            key={tag.id}
+                                            onClick={() => setSelectedTag(tag.value)}
+                                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${selectedTag === tag.value
+                                                    ? `${tag.color} text-white`
+                                                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                                                }`}
+                                        >
+                                            {tag.value}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* Stats */}
+                                <div className="text-sm text-gray-400">
+                                    {filteredNotes.length} {filteredNotes.length === 1 ? (activeTab === 'whiteboards' ? 'whiteboard' : 'note') : (activeTab === 'whiteboards' ? 'whiteboards' : 'notes')}
+                                </div>
                             </div>
                         </div>
 
-                        {/* Tag Filter */}
-                        <div className="flex flex-wrap gap-2">
-                            <button
-                                onClick={() => setSelectedTag('all')}
-                                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${selectedTag === 'all'
-                                        ? 'bg-blue-600 text-white'
-                                        : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-                                    }`}
-                            >
-                                All
-                            </button>
-                            {tagOptions.map(tag => (
+                        {/* Notes Grid */}
+                        <div className="mb-8">
+                            {filteredNotes.length === 0 ? (
+                                <div className="text-center py-16 bg-gray-900 rounded-2xl border border-gray-700">
+                                    <div className="w-24 h-24 mx-auto mb-6 text-gray-600">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                    </div>
+                                    <h3 className="text-xl font-semibold text-gray-400 mb-3">
+                                        {searchTerm || selectedTag !== 'all'
+                                            ? `No matching ${activeTab === 'whiteboards' ? 'whiteboards' : 'notes'} found`
+                                            : `No ${activeTab === 'whiteboards' ? 'whiteboards' : 'notes'} yet`}
+                                    </h3>
+                                    <p className="text-gray-500 max-w-md mx-auto">
+                                        {searchTerm || selectedTag !== 'all'
+                                            ? 'Try adjusting your search or filter criteria'
+                                            : activeTab === 'whiteboards'
+                                                ? 'Create your first whiteboard to get started!'
+                                                : 'Create your first note to get started!'
+                                        }
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                    {filteredNotes.map((note) => (
+                                        <NoteItem
+                                            key={note._id}
+                                            updateNote={updateNote}
+                                            note={note}
+                                            tag={note.tag}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Enhanced Stats */}
+                        {filteredNotes.length > 0 && (
+                            <div className="bg-gray-900 rounded-2xl border border-gray-700 p-6">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div className="text-center">
+                                        <div className="text-3xl font-bold text-white mb-2">{filteredNotes.length}</div>
+                                        <div className="text-gray-400 text-sm">Total {activeTab === 'whiteboards' ? 'Whiteboards' : 'Notes'}</div>
+                                    </div>
+                                    <div className="text-center">
+                                        <div className="text-3xl font-bold text-white mb-2">
+                                            {new Set(filteredNotes.map(note => note.tag)).size}
+                                        </div>
+                                        <div className="text-gray-400 text-sm">Categories</div>
+                                    </div>
+                                    <div className="text-center">
+                                        <div className="text-3xl font-bold text-white mb-2">
+                                            {filteredNotes.reduce((total, note) => total + (note.description?.length || 0), 0).toLocaleString()}
+                                        </div>
+                                        <div className="text-gray-400 text-sm">
+                                            {filteredNotes.reduce((total, note) => total + (note.description?.length || 0), 0) === 1
+                                                ? "1 Character"
+                                                : "Total Characters"}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    <aside className="mt-8 lg:mt-0 lg:w-72">
+                        <div className="rounded-2xl border border-gray-700 bg-gray-900 p-5 space-y-4">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-lg font-semibold text-white">Views</h3>
+                            </div>
+                            <div className="flex flex-col gap-2">
                                 <button
-                                    key={tag.id}
-                                    onClick={() => setSelectedTag(tag.value)}
-                                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${selectedTag === tag.value
-                                            ? `${tag.color} text-white`
+                                    onClick={() => setActiveTab('notes')}
+                                    className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all ${activeTab === 'notes'
+                                            ? 'bg-blue-600 text-white'
                                             : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                                         }`}
                                 >
-                                    {tag.value}
+                                    <span>Notes</span>
+                                    <span className="text-xs">{totalNotes}</span>
                                 </button>
-                            ))}
-                        </div>
+                                <button
+                                    onClick={() => setActiveTab('whiteboards')}
+                                    className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all ${activeTab === 'whiteboards'
+                                            ? 'bg-purple-600 text-white'
+                                            : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                                        }`}
+                                >
+                                    <span>Whiteboards</span>
+                                    <span className="text-xs">{totalWhiteboards}</span>
+                                </button>
+                            </div>
 
-                        {/* Stats */}
-                        <div className="text-sm text-gray-400">
-                            {filteredNotes.length} {filteredNotes.length === 1 ? 'note' : 'notes'}
+                            <div className="border-t border-gray-700 pt-4 space-y-3">
+                                <p className="text-xs text-gray-400">
+                                    Create a visual whiteboard note with drawings, arrows, and text.
+                                </p>
+                                <Link
+                                    href="/notes/whiteboard"
+                                    className="inline-flex items-center justify-center w-full px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-semibold hover:from-blue-700 hover:to-purple-700 transition-colors"
+                                >
+                                    New Whiteboard
+                                </Link>
+                            </div>
                         </div>
-                    </div>
+                    </aside>
                 </div>
-
-                {/* Notes Grid */}
-                <div className="mb-8">
-                    {filteredNotes.length === 0 ? (
-                        <div className="text-center py-16 bg-gray-900 rounded-2xl border border-gray-700">
-                            <div className="w-24 h-24 mx-auto mb-6 text-gray-600">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                            </div>
-                            <h3 className="text-xl font-semibold text-gray-400 mb-3">
-                                {searchTerm || selectedTag !== 'all' ? 'No matching notes found' : 'No notes yet'}
-                            </h3>
-                            <p className="text-gray-500 max-w-md mx-auto">
-                                {searchTerm || selectedTag !== 'all'
-                                    ? 'Try adjusting your search or filter criteria'
-                                    : 'Create your first note to get started!'
-                                }
-                            </p>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {filteredNotes.map((note) => (
-                                <NoteItem
-                                    key={note._id}
-                                    updateNote={updateNote}
-                                    note={note}
-                                    tag={note.tag}
-                                />
-                            ))}
-                        </div>
-                    )}
-                </div>
-
-                {/* Enhanced Stats */}
-                {filteredNotes.length > 0 && (
-                    <div className="bg-gray-900 rounded-2xl border border-gray-700 p-6">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div className="text-center">
-                                <div className="text-3xl font-bold text-white mb-2">{filteredNotes.length}</div>
-                                <div className="text-gray-400 text-sm">Total Notes</div>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-3xl font-bold text-white mb-2">
-                                    {new Set(filteredNotes.map(note => note.tag)).size}
-                                </div>
-                                <div className="text-gray-400 text-sm">Categories</div>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-3xl font-bold text-white mb-2">
-                                    {filteredNotes.reduce((total, note) => total + (note.description?.length || 0), 0).toLocaleString()}
-                                </div>
-                                <div className="text-gray-400 text-sm">
-                                    {filteredNotes.reduce((total, note) => total + (note.description?.length || 0), 0) === 1
-                                        ? "1 Character"
-                                        : "Total Characters"}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
             </div>
         </>
     )

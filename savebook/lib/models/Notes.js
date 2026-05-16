@@ -40,6 +40,16 @@ const NotesSchema = new Schema({
     default: null,
   },
 
+  isWhiteboard: {
+    type: Boolean,
+    default: false,
+  },
+
+  whiteboardData: {
+    type: mongoose.Schema.Types.Mixed,
+    default: null,
+  },
+
   date: {
     type: Date,
     default: Date.now,

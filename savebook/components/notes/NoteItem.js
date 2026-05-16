@@ -1,5 +1,6 @@
 import noteContext from '@/context/noteContext';
 import React, { useContext, useState, useMemo, useEffect } from 'react'
+import { useRouter } from 'next/navigation';
 import LinkPreviewCard from './LinkPreviewCard';
 import toast from 'react-hot-toast';
 import ReactMarkdown from 'react-markdown';
@@ -10,6 +11,7 @@ export default function NoteItem(props) {
     const context = useContext(noteContext);
     const { deleteNote, toggleShare } = context;
     const { note, updateNote } = props;
+    const router = useRouter();
     const [isDeleting, setIsDeleting] = useState(false);
     const [isViewOpen, setIsViewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState(null);
@@ -30,8 +32,20 @@ export default function NoteItem(props) {
     }
 
     const handleEdit = () => {
+        if (note?.isWhiteboard) {
+            router.push(`/notes/whiteboard/${note._id}`);
+            return;
+        }
         updateNote(note);
     }
+
+    const handleCardClick = () => {
+        if (note?.isWhiteboard) {
+            router.push(`/notes/whiteboard/${note._id}`);
+            return;
+        }
+        setIsViewOpen(true);
+    };
 
     const handleShare = async (e) => {
         e.stopPropagation();
@@ -196,8 +210,15 @@ export default function NoteItem(props) {
         <>
             <div className="group relative">
                 <div
-                    onClick={() => setIsViewOpen(true)}
-                    onKeyDown={handleCardKeyDown}
+                    onClick={handleCardClick}
+                    onKeyDown={(e) => {
+                        if (note?.isWhiteboard && (e.key === 'Enter' || e.key === ' ')) {
+                            e.preventDefault();
+                            router.push(`/notes/whiteboard/${note._id}`);
+                            return;
+                        }
+                        handleCardKeyDown(e);
+                    }}
                     role="button"
                     tabIndex="0"
                     aria-label={`View full note: ${note?.title || 'Untitled Note'}`}
@@ -210,7 +231,12 @@ export default function NoteItem(props) {
                             <h3 className="font-bold text-white text-lg leading-tight line-clamp-2 flex-1 pr-2">
                                 {note?.title || 'Untitled Note'}
                             </h3>
-                            <div className="flex-shrink-0">
+                            <div className="flex items-center gap-2 flex-shrink-0">
+                                {note?.isWhiteboard && (
+                                    <span className="px-2 py-1 rounded-md text-xs font-medium bg-purple-500/20 text-purple-200 border border-purple-500/30">
+                                        Whiteboard
+                                    </span>
+                                )}
                                 <span className={`${tagColor.bg} ${tagColor.text} px-2 py-1 rounded-md text-xs font-medium`}>
                                     {note?.tag || 'General'}
                                 </span>
@@ -321,7 +347,7 @@ export default function NoteItem(props) {
                                     disabled={isDeleting}
                                     aria-label={`Edit note: ${note?.title || 'Untitled Note'}`}
                                     className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 rounded-lg transition-all duration-200 group/edit disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    title="Edit Note"
+                                    title={note?.isWhiteboard ? "Open Whiteboard" : "Edit Note"}
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
