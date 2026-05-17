@@ -1,0 +1,31 @@
+name: Auto Label NSOC Issues
+
+on:
+  issues:
+    types:
+      - opened
+
+permissions:
+  issues: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  add-label:
+    name: Add NSOC'26 Label
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Add NSOC'26 label
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const issue_number = context.issue.number;
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number,
+              labels: ["NSOC'26"]
+            });

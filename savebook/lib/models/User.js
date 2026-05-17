@@ -62,6 +62,15 @@ const UserSchema = new Schema({
       ref: "Notes",
     },
   ],
+
+   // Encrypted master key blob: "{iv}:{ciphertext}" wrapped with password-derived key
+    encryptedMasterKey: {
+        type: String,
+        default: null,
+    },
+
+    // Encrypted master key blobs: wrapped with recovery code-derived key
+    recoveryBlobs: [String],
 });
 
 // Password hashing middleware
