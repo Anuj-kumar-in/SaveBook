@@ -1,3 +1,4 @@
+// NoteItem.js - Main component for displaying individual notes in the list with enhanced UI/UX and accessibility features
 import noteContext from '@/context/noteContext';
 import React, { useContext, useState, useMemo, useEffect } from 'react'
 import LinkPreviewCard from './LinkPreviewCard';
@@ -5,6 +6,7 @@ import toast from 'react-hot-toast';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Share2, Globe, Copy, Check } from 'lucide-react';
+import BookmarkButton from "./BookmarkButton";
 
 export default function NoteItem(props) {
     const context = useContext(noteContext);
@@ -194,14 +196,14 @@ export default function NoteItem(props) {
 
     return (
         <>
-            <div className="group relative">
+            <div className="group relative w-full">
                 <div
                     onClick={() => setIsViewOpen(true)}
                     onKeyDown={handleCardKeyDown}
                     role="button"
                     tabIndex="0"
                     aria-label={`View full note: ${note?.title || 'Untitled Note'}`}
-                    className="cursor-pointer relative bg-gray-900 rounded-2xl border border-gray-700 hover:border-gray-600 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="cursor-pointer w-full relative bg-gray-900 rounded-2xl border border-gray-700 hover:border-gray-600 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
 
                     {/* Header with Gradient */}
@@ -261,7 +263,7 @@ export default function NoteItem(props) {
                                         role="button"
                                         tabIndex="0"
                                         aria-label={`View image ${index + 1}`}
-                                        className="relative overflow-hidden rounded-xl border border-gray-700 bg-gray-800 hover:scale-105 transition-transform duration-300 cursor-pointer group/img focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="relative w-full overflow-hidden rounded-xl border border-gray-700 bg-gray-800 hover:scale-105 transition-transform duration-300 cursor-pointer group/img focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         onClick={(e) => { e.stopPropagation(); setPreviewImage(img); }}
                                         onKeyDown={(e) => handleActionKeyDown(e, () => setPreviewImage(img))}
                                     >
@@ -311,21 +313,38 @@ export default function NoteItem(props) {
                     {/* Enhanced Footer */}
                     <div className="px-5 py-4 bg-gray-800/50 border-t border-gray-700 backdrop-blur-sm relative z-10">
                         <div className="flex items-center justify-between gap-4 mb-3">
+                            {/* Bookmark Button */}
                             <div className="flex items-center gap-2">
+                                <BookmarkButton
+                                noteId={note._id}
+                                initialIsBookmarked={note.isBookmarked || false}  // 👈 now this will be true/false correctly
+                                size="md"
+                                />
                                 <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleEdit();
-                                    }}
-                                    onKeyDown={(e) => handleActionKeyDown(e, handleEdit)}
-                                    disabled={isDeleting}
-                                    aria-label={`Edit note: ${note?.title || 'Untitled Note'}`}
-                                    className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 rounded-lg transition-all duration-200 group/edit disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    title="Edit Note"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleEdit();
+                                }}
+                                onKeyDown={(e) => handleActionKeyDown(e, handleEdit)}
+                                disabled={isDeleting}
+                                aria-label={`Edit note: ${note?.title || "Untitled Note"}`}
+                                className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 rounded-lg transition-all duration-200 group/edit disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                title="Edit Note"
                                 >
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
+                                <svg
+                                    className="w-5 h-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                    />
+                                </svg>
                                 </button>
 
                                 {/* Share Button */}

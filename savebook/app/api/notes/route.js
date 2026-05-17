@@ -28,7 +28,7 @@ export async function GET(request) {
       );
     }
 
-    const user = await User.findById(decoded.userId).select("-password");
+    const user = await User.findById(decoded.userId).select("bookmarks"); // 👈 fetch bookmarks
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
@@ -37,7 +37,15 @@ export async function GET(request) {
       user: new mongoose.Types.ObjectId(decoded.userId),
     }).lean();
 
-    return NextResponse.json(notes);
+    // 👇 Attach isBookmarked to each note
+    const bookmarkedIds = new Set(user.bookmarks.map((id) => id.toString()));
+
+    const notesWithBookmarks = notes.map((note) => ({
+      ...note,
+      isBookmarked: bookmarkedIds.has(note._id.toString()),
+    }));
+
+    return NextResponse.json(notesWithBookmarks);
   } catch (error) {
     console.error(error);
     return NextResponse.json(

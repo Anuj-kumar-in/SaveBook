@@ -542,7 +542,8 @@ export default function Notes() {
             )}
 
             {/* Notes Section */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gray-900">
+            <div className="w-full bg-gray-900 min-h-screen">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Header */}
                 <div className="text-center mb-8">
                     <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
@@ -664,6 +665,7 @@ export default function Notes() {
                         </div>
                     </div>
                 )}
+            </div>
             </div>
         </>
     )
