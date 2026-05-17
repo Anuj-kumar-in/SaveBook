@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, KeyRound, Mail, ShieldAlert, Sparkles } from "lucide-react";
+import AuthShell from "@/components/auth/AuthShell";
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
@@ -211,181 +212,258 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-blue-900 flex items-center justify-center p-4">
-      <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-extrabold text-white">
-            {step === 1 ? "Reset Password" : "Set New Password"}
-          </h2>
-          <p className="mt-2 text-sm text-gray-300">
-            {step === 1
-              ? "Choose a method to reset your password"
-              : "Enter the OTP sent to your email and your new password"}
-          </p>
+    <AuthShell
+      eyebrow="Password Reset"
+      title="Regain access to your notes and continue where you left off."
+      description="Reset your password using email verification or a recovery code. Your SaveBook workspace will be ready once you're back in."
+      asideTitle="Recovery options"
+      asideCopy="Choose email verification for a quick reset, or use your recovery code to preserve your encrypted notes and maintain full access to your content."
+    >
+      <div className="mb-8">
+        <div className="inline-flex items-center gap-2 rounded-full bg-[color:var(--background)]/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-[color:var(--accent-2)]">
+          <ShieldAlert className="h-3.5 w-3.5" />
+          {step === 1 ? "Reset password" : "Set new password"}
         </div>
+        <h2 className="mt-5 text-3xl font-semibold text-[color:var(--foreground)]">
+          {step === 1 ? "Choose recovery method" : "Create new password"}
+        </h2>
+        <p className="mt-3 text-sm leading-7 text-[color:var(--muted)]">
+          {step === 1
+            ? "Select how you'd like to reset your password and regain access to your account."
+            : "Enter the verification code and set a new password for your SaveBook account."}
+        </p>
+      </div>
 
-        <div className="bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-700">
-          {step === 1 && (
-            <div className="mb-6 flex space-x-2 p-1 bg-gray-900 rounded-lg">
-              <button
-                onClick={() => { setMethod("otp"); setErrorType(""); setMessage(""); }}
-                className={`flex-1 py-2 text-sm font-medium rounded-md transition-colors ${method === "otp" ? "bg-blue-600 text-white shadow-sm" : "text-gray-400 hover:text-gray-200"}`}
-              >
-                Get OTP via Email
-              </button>
-              <button
-                onClick={() => { setMethod("recoveryCode"); setErrorType(""); setMessage(""); }}
-                className={`flex-1 py-2 text-sm font-medium rounded-md transition-colors ${method === "recoveryCode" ? "bg-blue-600 text-white shadow-sm" : "text-gray-400 hover:text-gray-200"}`}
-              >
-                Use Recovery Code
-              </button>
-            </div>
-          )}
+      <div className="rounded-[2rem] border border-[var(--border)] bg-[color:var(--background)]/55 p-6 md:p-7">
+        {step === 1 && (
+          <div className="mb-6 flex gap-2 rounded-[1.2rem] border border-[var(--border)] bg-[color:var(--background)]/70 p-1">
+            <button
+              onClick={() => { setMethod("otp"); setErrorType(""); setMessage(""); }}
+              className={`flex flex-1 items-center justify-center gap-2 rounded-[0.9rem] px-4 py-2.5 text-sm font-medium transition-all ${
+                method === "otp"
+                  ? "bg-gradient-to-r from-[color:var(--accent)] to-[color:var(--accent-3)] text-[color:var(--button-text)] shadow-md"
+                  : "text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
+              }`}
+            >
+              <Mail className="h-4 w-4" />
+              Email OTP
+            </button>
+            <button
+              onClick={() => { setMethod("recoveryCode"); setErrorType(""); setMessage(""); }}
+              className={`flex flex-1 items-center justify-center gap-2 rounded-[0.9rem] px-4 py-2.5 text-sm font-medium transition-all ${
+                method === "recoveryCode"
+                  ? "bg-gradient-to-r from-[color:var(--accent)] to-[color:var(--accent-3)] text-[color:var(--button-text)] shadow-md"
+                  : "text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
+              }`}
+            >
+              <KeyRound className="h-4 w-4" />
+              Recovery Code
+            </button>
+          </div>
+        )}
 
-          {step === 1 && method === "otp" && (
-            <form onSubmit={handleRequestOTP} className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+        {step === 1 && method === "otp" && (
+          <form onSubmit={handleRequestOTP} className="space-y-6">
+            <div>
+              <label htmlFor="email-otp" className="mb-2 block text-sm font-medium text-[color:var(--foreground)]">
+                Email Address
+              </label>
+              <div className={`field-shell px-4 py-3 ${errorType === "identifier" ? "!border-red-500" : ""}`}>
                 <input
+                  id="email-otp"
                   type="email"
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   required
-                  className={`w-full px-4 py-3 bg-gray-700 border rounded-lg text-white focus:ring-2 focus:ring-blue-500 outline-none transition-colors ${errorType === "identifier" ? "border-red-500 focus:border-red-500" : "border-gray-600"}`}
+                  className="field-input"
                   placeholder="Enter your registered email"
                   disabled={loading}
                 />
               </div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-700 text-white py-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-800 transition disabled:opacity-50 flex justify-center items-center"
-              >
-                {loading ? "Sending OTP..." : "Send OTP"}
-              </button>
-            </form>
-          )}
+              <p className="mt-2 text-xs text-[color:var(--muted)]">
+                We'll send a one-time password to this email address.
+              </p>
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="site-button w-full disabled:opacity-60"
+            >
+              {loading ? "Sending OTP..." : "Send OTP"}
+            </button>
+          </form>
+        )}
 
-          {(step === 2 || (step === 1 && method === "recoveryCode")) && (
-            <form onSubmit={handleResetPassword} className="space-y-5">
-              {method === "recoveryCode" && (
-                <>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Username or Email</label>
+        {(step === 2 || (step === 1 && method === "recoveryCode")) && (
+          <form onSubmit={handleResetPassword} className="space-y-6">
+            {method === "recoveryCode" && (
+              <>
+                <div>
+                  <label htmlFor="identifier-recovery" className="mb-2 block text-sm font-medium text-[color:var(--foreground)]">
+                    Username or Email
+                  </label>
+                  <div className={`field-shell px-4 py-3 ${errorType === "identifier" ? "!border-red-500" : ""}`}>
                     <input
+                      id="identifier-recovery"
                       type="text"
                       value={identifier}
                       onChange={(e) => setIdentifier(e.target.value)}
                       required
-                      className={`w-full px-4 py-3 bg-gray-700 border rounded-lg text-white focus:ring-2 focus:ring-blue-500 outline-none transition-colors ${errorType === "identifier" ? "border-red-500 focus:border-red-500" : "border-gray-600"}`}
+                      className="field-input"
                       placeholder="Enter your username or email"
                       disabled={loading}
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Recovery Code</label>
+                </div>
+                <div>
+                  <label htmlFor="recovery-code" className="mb-2 block text-sm font-medium text-[color:var(--foreground)]">
+                    Recovery Code
+                  </label>
+                  <div className={`field-shell px-4 py-3 ${errorType === "recoveryCode" ? "!border-red-500" : ""}`}>
                     <input
+                      id="recovery-code"
                       type="text"
                       value={recoveryCode}
                       onChange={(e) => setRecoveryCode(e.target.value)}
                       required
-                      className={`w-full px-4 py-3 bg-gray-700 border rounded-lg text-white font-mono tracking-wider focus:ring-2 focus:ring-blue-500 outline-none transition-colors ${errorType === "recoveryCode" ? "border-red-500 focus:border-red-500" : "border-gray-600"}`}
+                      className="field-input font-mono tracking-wider"
                       placeholder="e.g. a1b2c3d4"
                       disabled={loading}
                     />
                   </div>
-                </>
-              )}
+                  <p className="mt-2 text-xs text-[color:var(--muted)]">
+                    Enter one of the recovery codes you saved when creating your account.
+                  </p>
+                </div>
+              </>
+            )}
 
-              {method === "otp" && step === 2 && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">One-Time Password (OTP)</label>
+            {method === "otp" && step === 2 && (
+              <div>
+                <label htmlFor="otp-code" className="mb-2 block text-sm font-medium text-[color:var(--foreground)]">
+                  One-Time Password (OTP)
+                </label>
+                <div className={`field-shell px-4 py-3 ${errorType === "otp" ? "!border-red-500" : ""}`}>
                   <input
+                    id="otp-code"
                     type="text"
                     value={otp}
                     onChange={(e) => setOtp(e.target.value.trim())}
                     required
-                    className={`w-full px-4 py-3 bg-gray-700 border rounded-lg text-white font-mono tracking-wider focus:ring-2 focus:ring-blue-500 outline-none transition-colors ${errorType === "otp" ? "border-red-500 focus:border-red-500" : "border-gray-600"}`}
-                    placeholder="Enter 6-digit OTP"
+                    className="field-input font-mono tracking-wider text-center text-lg"
+                    placeholder="000000"
                     disabled={loading}
                     maxLength={6}
                   />
                 </div>
-              )}
-
-              {method === "otp" && step === 2 && (
-                <div className="p-3 rounded-lg text-sm bg-yellow-900/30 text-yellow-400 border border-yellow-800">
-                  ⚠️ Resetting via OTP will permanently delete all your encrypted notes. Use a recovery code to keep them.
-                </div>
-              )}
-
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">New Password</label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className={`w-full px-4 py-3 bg-gray-700 border rounded-lg text-white focus:ring-2 focus:ring-blue-500 outline-none pr-10 transition-colors ${errorType === "password" ? "border-red-500 focus:border-red-500" : "border-gray-600"}`}
-                    placeholder="Enter new password"
-                    disabled={loading}
-                    minLength={6}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 focus:outline-none"
-                  >
-                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                  </button>
-                </div>
+                <p className="mt-2 text-xs text-[color:var(--muted)]">
+                  Check your email for the 6-digit verification code.
+                </p>
               </div>
+            )}
 
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Confirm Password</label>
-                <div className="relative">
-                  <input
-                    type={showConfirmPassword ? "text" : "password"}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    className={`w-full px-4 py-3 bg-gray-700 border rounded-lg text-white focus:ring-2 focus:ring-blue-500 outline-none pr-10 transition-colors ${errorType === "confirmPassword" ? "border-red-500 focus:border-red-500" : "border-gray-600"}`}
-                    placeholder="Confirm new password"
-                    disabled={loading}
-                    minLength={6}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 focus:outline-none"
-                  >
-                    {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                  </button>
-                </div>
+            {method === "otp" && step === 2 && (
+              <div className="flex items-start gap-3 rounded-[1.2rem] border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-sm text-yellow-600 dark:text-yellow-400">
+                <ShieldAlert className="mt-0.5 h-5 w-5 flex-shrink-0" />
+                <p>
+                  <strong>Warning:</strong> Resetting via OTP will permanently delete all your encrypted notes. Use a recovery code to preserve them.
+                </p>
               </div>
+            )}
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-700 text-white py-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-800 transition disabled:opacity-50 flex justify-center items-center mt-4"
-              >
-                {loading ? "Processing..." : "Reset Password"}
-              </button>
-            </form>
-          )}
-
-          {message && (
-            <div className={`mt-4 p-3 rounded-lg text-sm text-center ${errorType === "success" ? "bg-green-900/30 text-green-400 border border-green-800" : "bg-red-900/30 text-red-400 border border-red-800"}`}>
-              {message}
+            <div>
+              <label htmlFor="new-password" className="mb-2 block text-sm font-medium text-[color:var(--foreground)]">
+                New Password
+              </label>
+              <div className={`field-shell relative px-4 py-3 ${errorType === "password" ? "!border-red-500" : ""}`}>
+                <input
+                  id="new-password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="field-input pr-10"
+                  placeholder="Enter new password"
+                  disabled={loading}
+                  minLength={6}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </div>
+              <p className="mt-2 text-xs text-[color:var(--muted)]">
+                Password must be at least 6 characters long.
+              </p>
             </div>
-          )}
 
-          <div className="text-center mt-6">
-            <Link href="/login" className="text-sm text-blue-400 hover:text-blue-300 transition-colors">Back to Login</Link>
+            <div>
+              <label htmlFor="confirm-password" className="mb-2 block text-sm font-medium text-[color:var(--foreground)]">
+                Confirm Password
+              </label>
+              <div className={`field-shell relative px-4 py-3 ${errorType === "confirmPassword" ? "!border-red-500" : ""}`}>
+                <input
+                  id="confirm-password"
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  className="field-input pr-10"
+                  placeholder="Confirm new password"
+                  disabled={loading}
+                  minLength={6}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
+                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                >
+                  {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="site-button w-full disabled:opacity-60"
+            >
+              {loading ? "Processing..." : "Reset Password"}
+            </button>
+          </form>
+        )}
+
+        {message && (
+          <div
+            className={`mt-6 rounded-[1.2rem] border px-4 py-3 text-center text-sm ${
+              errorType === "success"
+                ? "border-green-500/30 bg-green-500/10 text-green-600 dark:text-green-400"
+                : "border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400"
+            }`}
+          >
+            {message}
           </div>
+        )}
+
+        <div className="mt-6 text-center">
+          <Link
+            href="/login"
+            className="text-sm text-[color:var(--accent)] hover:opacity-80 transition-opacity"
+          >
+            Back to Login
+          </Link>
         </div>
       </div>
-    </div>
+
+      <div className="mt-6 flex items-center gap-3 rounded-[1.5rem] border border-[var(--border)] bg-[color:var(--background)]/45 px-4 py-3 text-sm text-[color:var(--muted)]">
+        <Sparkles className="h-4 w-4 text-[color:var(--accent)]" />
+        Your notes are waiting. Reset your password to continue.
+      </div>
+    </AuthShell>
   );
 }
