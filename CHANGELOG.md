@@ -1,3 +1,65 @@
+## [2026-05-17]
+
+### 🐛 Bug Fixes
+-  improve footer theme consistency and dark mode input styling (3b95db4) - @Muskankr
+-  improve footer UI consistency with navbar theme (b00f7e6) - @Muskankr
+-  fixes (aaea882) - @itzzavdheshh
+-  oAuth (12758b5) - @itzzavdheshh
+-  oAuth (4f31cd0) - @itzzavdheshh
+
+### 📝 Documentation
+-  auto update changelog (18360ce) - @HarshYadav152
+-  auto update changelog (cbb03aa) - @HarshYadav152
+-  auto update changelog (780bc68) - @HarshYadav152
+-  auto update changelog (ca03be2) - @HarshYadav152
+-  auto update changelog (f620dce) - @HarshYadav152
+
+### 🔧 Chore
+-  prepare footer UI before rebase (5a1a5ef) - @Muskankr
+
+### 📦 Other Changes
+- style: update forgot password UI to match home page theme (25252b7) - @Atiqumer
+- Updated (d80b7b9) - @Dipanita45
+- Add logo to docs page (9168b49) - @aliya mahaboob
+- Update navbar logo image (bee0300) - @aliya mahaboob
+- added bookmark in the notes (5d8f792) - @Iffat Shaikh
+- Resolved forget pass error (d001679) - @itzzavdheshh
+- Update (8001bec) - @Dipanita45
+- 🔐 feat: Zero-Knowledge End-to-End Encryption for All Notes (040b47f) - @itzzavdheshh
+- 🔐 feat: Zero-Knowledge End-to-End Encryption for All Notes (e7da5bf) - @itzzavdheshh
+
+
+## [2026-05-17]
+
+### 🐛 Bug Fixes
+-  improve footer theme consistency and dark mode input styling (3b95db4) - @Muskankr
+-  improve footer UI consistency with navbar theme (b00f7e6) - @Muskankr
+-  fixes (aaea882) - @itzzavdheshh
+-  oAuth (12758b5) - @itzzavdheshh
+-  oAuth (4f31cd0) - @itzzavdheshh
+
+### 📝 Documentation
+-  auto update changelog (cbb03aa) - @HarshYadav152
+-  auto update changelog (780bc68) - @HarshYadav152
+-  auto update changelog (ca03be2) - @HarshYadav152
+-  auto update changelog (f620dce) - @HarshYadav152
+-  auto update changelog (3868e22) - @HarshYadav152
+
+### 🔧 Chore
+-  prepare footer UI before rebase (5a1a5ef) - @Muskankr
+
+### 📦 Other Changes
+- style: update forgot password UI to match home page theme (25252b7) - @Atiqumer
+- Updated (d80b7b9) - @Dipanita45
+- Add logo to docs page (9168b49) - @aliya mahaboob
+- Update navbar logo image (bee0300) - @aliya mahaboob
+- Resolved forget pass error (d001679) - @itzzavdheshh
+- Update (8001bec) - @Dipanita45
+- 🔐 feat: Zero-Knowledge End-to-End Encryption for All Notes (040b47f) - @itzzavdheshh
+- 🔐 feat: Zero-Knowledge End-to-End Encryption for All Notes (e7da5bf) - @itzzavdheshh
+- Updated (00716bb) - @Dipanita45
+
+
 ## [2026-05-16]
 
 ### 🐛 Bug Fixes
