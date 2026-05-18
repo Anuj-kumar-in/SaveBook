@@ -56,8 +56,14 @@ const UserSchema = new Schema({
             used: { type: Boolean, default: false }
         }
     ],
+    bookmarks: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Notes",
+    },
+  ],
 
-    // Encrypted master key blob: "{iv}:{ciphertext}" wrapped with password-derived key
+   // Encrypted master key blob: "{iv}:{ciphertext}" wrapped with password-derived key
     encryptedMasterKey: {
         type: String,
         default: null,
