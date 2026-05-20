@@ -71,6 +71,13 @@ const UserSchema = new Schema({
 
     // Encrypted master key blobs: wrapped with recovery code-derived key
     recoveryBlobs: [String],
+
+    bookmarks: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Notes",
+    },
+  ],
 });
 
 // Password hashing middleware
