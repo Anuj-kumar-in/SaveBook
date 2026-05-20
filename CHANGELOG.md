@@ -1,3 +1,34 @@
+## [2026-05-20]
+
+### 🐛 Bug Fixes
+-  improve footer theme consistency and dark mode input styling (b3124cb) - @Muskankr
+-  improve footer theme consistency and dark mode input styling (3b95db4) - @Muskankr
+
+### 📝 Documentation
+-  auto update changelog (348694d) - @HarshYadav152
+-  auto update changelog (ff681d2) - @HarshYadav152
+-  auto update changelog (daddd7e) - @HarshYadav152
+-  auto update changelog (b264ce6) - @HarshYadav152
+-  create SaveBook documentation using Docusaurus (67e9b29) - @Muskankr
+-  auto update changelog (7627603) - @HarshYadav152
+-  auto update changelog (18360ce) - @HarshYadav152
+-  auto update changelog (cbb03aa) - @HarshYadav152
+-  auto update changelog (780bc68) - @HarshYadav152
+
+### 🔧 Chore
+-  prepare footer UI before rebase (f4196cb) - @Muskankr
+-  prepare footer UI before rebase (5a1a5ef) - @Muskankr
+
+### 📦 Other Changes
+- refactor: move docs to docusaurus-app (31748da) - @Muskankr
+- style: update forgot password UI to match home page theme (2d6acd1) - @Atiqumer
+- Updated (d0f3429) - @Dipanita45
+- Update (950e5ad) - @Dipanita45
+- Updated (71c3bbb) - @Dipanita45
+- added bookmark in the notes (d76d727) - @Iffat Shaikh
+- style: update forgot password UI to match home page theme (25252b7) - @Atiqumer
+
+
 ## [2026-05-17]
 
 ### 🐛 Bug Fixes
