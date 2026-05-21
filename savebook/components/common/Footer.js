@@ -239,6 +239,13 @@ export default function Footer() {
     Email address
   </label>
 
+              <input
+                id="newsletter-email"
+                type="email"
+                placeholder="Enter your email"
+                aria-label="Email address"
+                className="flex-1 px-5 py-3 rounded-lg border border-[#334155] bg-[color:var(--background-elevated)] text-white placeholder:text-[color:var(--muted)] text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
   <input
     id="newsletter-email"
     type="email"
@@ -274,7 +281,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="pt-6 border-t border-[#1b2b45]">
+        <div className="pt-6 border-t border-[var(--border)]">
           <div className="flex flex-col lg:flex-row justify-between items-center gap-4 text-sm text-[color:var(--muted)]">
             <div className="flex flex-col md:flex-row items-center gap-6">
               <p>&copy; {currentYear} SaveBook. All rights reserved.</p>
