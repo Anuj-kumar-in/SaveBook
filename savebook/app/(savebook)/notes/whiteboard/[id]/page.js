@@ -164,6 +164,8 @@ export default function WhiteboardEditorPage() {
           title="Whiteboard Editor"
           description="Draw, brainstorm, and autosave your whiteboard notes."
           saveStatus={saveStatus}
+          secondaryActionLabel="New Whiteboard"
+          onSecondaryAction={() => router.push("/notes/whiteboard")}
           primaryActionLabel={isSaving ? "Saving..." : "Save now"}
           onPrimaryAction={handleSaveNow}
           onBack={() => router.push("/notes")}

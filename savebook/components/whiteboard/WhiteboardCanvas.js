@@ -47,7 +47,10 @@ export default function WhiteboardCanvas({
   );
 
   return (
-    <div className={`whiteboard-canvas ${className}`.trim()}>
+    <div
+      className={`whiteboard-canvas ${className}`.trim()}
+      style={{ width: "100%", height: "100%" }}
+    >
       <Excalidraw
         theme={theme}
         initialData={initialDataRef.current}

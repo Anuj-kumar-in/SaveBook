@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import noteContext from "@/context/noteContext";
@@ -23,7 +23,6 @@ export default function NewWhiteboardPage() {
   const [whiteboardData, setWhiteboardData] = useState(null);
   const [saveStatus, setSaveStatus] = useState("idle");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const hasRestored = useRef(false);
 
   useEffect(() => {
     if (!loading && !isAuthenticated && !needsRelogin) {
@@ -32,21 +31,12 @@ export default function NewWhiteboardPage() {
   }, [isAuthenticated, loading, needsRelogin, router]);
 
   useEffect(() => {
-    if (hasRestored.current) return;
-    const draft = window.localStorage.getItem(DRAFT_KEY);
-    if (!draft) return;
-
-    try {
-      const parsed = JSON.parse(draft);
-      setTitle(parsed.title || "");
-      setDescription(parsed.description || "");
-      setTag(parsed.tag || "Ideas");
-      setWhiteboardData(parsed.whiteboardData || null);
-      hasRestored.current = true;
-      toast.success("Restored your whiteboard draft");
-    } catch {
-      window.localStorage.removeItem(DRAFT_KEY);
-    }
+    window.localStorage.removeItem(DRAFT_KEY);
+    setTitle("");
+    setDescription("");
+    setTag("Ideas");
+    setWhiteboardData(null);
+    setSaveStatus("idle");
   }, []);
 
   useEffect(() => {
