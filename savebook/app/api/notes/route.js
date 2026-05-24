@@ -72,7 +72,7 @@ export async function POST(request) {
 
     //Parse body
     const body = await request.json();
-    const { title, description, tag, images, audio } = body;
+    const { title, description, tag, images, audio, whiteboardData, isWhiteboard } = body;
 
     if (!title || !description) {
       return NextResponse.json(
@@ -95,6 +95,8 @@ export async function POST(request) {
       tag: tag?.trim() || "General",
       images: Array.isArray(images) ? images : [],
       audio: audio && audio.url ? { url: audio.url, duration: audio.duration || 0 } : null,
+      isWhiteboard: Boolean(isWhiteboard),
+      whiteboardData: whiteboardData ?? null,
     });
 
     return NextResponse.json(note, { status: 201 });

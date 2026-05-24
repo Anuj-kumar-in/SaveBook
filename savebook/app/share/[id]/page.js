@@ -7,9 +7,12 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import LinkPreviewCard from "@/components/notes/LinkPreviewCard";
 import { Loader2 } from "lucide-react";
+import WhiteboardPreview from "@/components/whiteboard/WhiteboardPreview";
+import { useTheme } from "@/components/providers/ThemeProvider";
 
 export default function SharedNotePage() {
     const { id } = useParams();
+    const { theme } = useTheme();
     const [note, setNote] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -32,9 +35,16 @@ export default function SharedNotePage() {
                 const { importShareKey, decryptWithKey } = await import('@/lib/utils/clientCrypto');
                 const shareKey = await importShareKey(shareKeyHex);
                 const plaintext = await decryptWithKey(data.shareEncryptedContent, shareKey);
-                const { title, description } = JSON.parse(plaintext);
+                const { title, description, whiteboardData, isWhiteboard } = JSON.parse(plaintext);
 
-                setNote({ title, description, tag: data.tag, date: data.date });
+                setNote({
+                    title,
+                    description,
+                    tag: data.tag,
+                    date: data.date,
+                    whiteboardData: whiteboardData || null,
+                    isWhiteboard: Boolean(isWhiteboard),
+                });
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -119,6 +129,10 @@ export default function SharedNotePage() {
                                 {note.description}
                             </ReactMarkdown>
                         </div>
+
+                        {note.isWhiteboard && note.whiteboardData && (
+                            <WhiteboardPreview data={note.whiteboardData} theme={theme} className="mt-6" />
+                        )}
 
                         {/* Images */}
                         {note.images && note.images.length > 0 && (

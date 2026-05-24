@@ -1,6 +1,7 @@
 // NoteItem.js - Main component for displaying individual notes in the list with enhanced UI/UX and accessibility features
 import noteContext from '@/context/noteContext';
 import React, { useContext, useState, useMemo, useEffect } from 'react'
+import { useRouter } from 'next/navigation';
 import LinkPreviewCard from './LinkPreviewCard';
 import toast from 'react-hot-toast';
 import ReactMarkdown from 'react-markdown';
@@ -12,6 +13,7 @@ export default function NoteItem(props) {
     const context = useContext(noteContext);
     const { deleteNote, toggleShare } = context;
     const { note, updateNote } = props;
+    const router = useRouter();
     const [isDeleting, setIsDeleting] = useState(false);
     const [isViewOpen, setIsViewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState(null);
@@ -32,8 +34,20 @@ export default function NoteItem(props) {
     }
 
     const handleEdit = () => {
+        if (note?.isWhiteboard) {
+            router.push(`/notes/whiteboard/${note._id}`);
+            return;
+        }
         updateNote(note);
     }
+
+    const handleCardClick = () => {
+        if (note?.isWhiteboard) {
+            router.push(`/notes/whiteboard/${note._id}`);
+            return;
+        }
+        setIsViewOpen(true);
+    };
 
     const handleShare = async (e) => {
         e.stopPropagation();
@@ -198,8 +212,15 @@ export default function NoteItem(props) {
         <>
             <div className="group relative w-full">
                 <div
-                    onClick={() => setIsViewOpen(true)}
-                    onKeyDown={handleCardKeyDown}
+                    onClick={handleCardClick}
+                    onKeyDown={(e) => {
+                        if (note?.isWhiteboard && (e.key === 'Enter' || e.key === ' ')) {
+                            e.preventDefault();
+                            router.push(`/notes/whiteboard/${note._id}`);
+                            return;
+                        }
+                        handleCardKeyDown(e);
+                    }}
                     role="button"
                     tabIndex="0"
                     aria-label={`View full note: ${note?.title || 'Untitled Note'}`}
@@ -212,7 +233,12 @@ export default function NoteItem(props) {
                             <h3 className="font-bold text-white text-lg leading-tight line-clamp-2 flex-1 pr-2">
                                 {note?.title || 'Untitled Note'}
                             </h3>
-                            <div className="flex-shrink-0">
+                            <div className="flex items-center gap-2 flex-shrink-0">
+                                {note?.isWhiteboard && (
+                                    <span className="px-2 py-1 rounded-md text-xs font-medium bg-purple-500/20 text-purple-200 border border-purple-500/30">
+                                        Whiteboard
+                                    </span>
+                                )}
                                 <span className={`${tagColor.bg} ${tagColor.text} px-2 py-1 rounded-md text-xs font-medium`}>
                                     {note?.tag || 'General'}
                                 </span>
@@ -321,6 +347,15 @@ export default function NoteItem(props) {
                                 size="md"
                                 />
                                 <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleEdit();
+                                    }}
+                                    onKeyDown={(e) => handleActionKeyDown(e, handleEdit)}
+                                    disabled={isDeleting}
+                                    aria-label={`Edit note: ${note?.title || 'Untitled Note'}`}
+                                    className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 rounded-lg transition-all duration-200 group/edit disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    title={note?.isWhiteboard ? "Open Whiteboard" : "Edit Note"}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     handleEdit();

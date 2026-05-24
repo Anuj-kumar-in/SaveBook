@@ -16,14 +16,19 @@ const NoteState = (props) => {
   const [notes, setNotes] = useState([])
   const { getMasterKey } = useAuth()
 
-  const encryptNote = async (title, description) => {
+  const encryptNote = async (title, description, whiteboardData) => {
     const key = getMasterKey()
-    if (!key) return { title, description }
+    if (!key) return { title, description, whiteboardData }
     const { encryptWithKey } = await getCrypto()
-    return {
+    const encrypted = {
       title: await encryptWithKey(title, key),
       description: await encryptWithKey(description, key),
     }
+    if (whiteboardData !== undefined) {
+      const serialized = whiteboardData === null ? null : JSON.stringify(whiteboardData)
+      encrypted.whiteboardData = serialized ? await encryptWithKey(serialized, key) : null
+    }
+    return encrypted
   }
 
   const decryptNote = async (note) => {
@@ -31,11 +36,20 @@ const NoteState = (props) => {
     if (!key) return note
     try {
       const { decryptWithKey } = await getCrypto()
-      return {
+      const decrypted = {
         ...note,
         title: await decryptWithKey(note.title, key),
         description: await decryptWithKey(note.description, key),
       }
+      if (note.whiteboardData && typeof note.whiteboardData === "string") {
+        try {
+          const whiteboardJson = await decryptWithKey(note.whiteboardData, key)
+          decrypted.whiteboardData = JSON.parse(whiteboardJson)
+        } catch {
+          decrypted.whiteboardData = null
+        }
+      }
+      return decrypted
     } catch {
       return note
     }
@@ -57,18 +71,19 @@ const NoteState = (props) => {
     }
   }, [getMasterKey])
 
-  const addNote = useCallback(async (title, description, tag, images = [], audio = null) => {
+  const addNote = useCallback(async (title, description, tag, images = [], audio = null, whiteboardData = undefined, isWhiteboard = false) => {
     try {
-      const encrypted = await encryptNote(title, description)
+      const encrypted = await encryptNote(title, description, whiteboardData)
       const response = await fetch(`/api/notes`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...encrypted, tag, images, audio })
+        body: JSON.stringify({ ...encrypted, tag, images, audio, isWhiteboard })
       })
       const note = await response.json()
       const decrypted = await decryptNote(note)
       setNotes(prev => [decrypted, ...(Array.isArray(prev) ? prev : [])])
+      return decrypted
     } catch (error) {
       console.error('Error adding note:', error)
       getNotes()
@@ -90,14 +105,14 @@ const NoteState = (props) => {
     }
   }, [notes, getNotes])
 
-  const editNote = useCallback(async (id, title, description, tag, images = [], audio = null) => {
+  const editNote = useCallback(async (id, title, description, tag, images = [], audio = null, whiteboardData = undefined, isWhiteboard = false) => {
     try {
-      const encrypted = await encryptNote(title, description)
+      const encrypted = await encryptNote(title, description, whiteboardData)
       const response = await fetch(`/api/notes/${id}`, {
         method: 'PUT',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...encrypted, tag, images, audio }),
+        body: JSON.stringify({ ...encrypted, tag, images, audio, isWhiteboard }),
       })
       if (!response.ok) throw new Error('Failed to update note')
       const updatedNote = await response.json()
@@ -119,8 +134,14 @@ const NoteState = (props) => {
         const { generateShareKeyHex, importShareKey, encryptWithKey } = await getCrypto()
         const shareKeyHex = generateShareKeyHex()
         const shareKey = await importShareKey(shareKeyHex)
+        const sharePayload = {
+          title: note.title,
+          description: note.description,
+          isWhiteboard: Boolean(note.isWhiteboard),
+          whiteboardData: note.isWhiteboard ? (note.whiteboardData ?? null) : undefined,
+        }
         const shareEncryptedContent = await encryptWithKey(
-          JSON.stringify({ title: note.title, description: note.description }),
+          JSON.stringify(sharePayload),
           shareKey
         )
         // shareKeyHex goes into the URL fragment — never sent to server
