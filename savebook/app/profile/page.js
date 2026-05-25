@@ -3,8 +3,14 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/auth/authContext';
 import { useRouter } from 'next/navigation';
 
+// Patch: Import useContext and AuthContext to update user context
+import { useContext } from 'react';
+import AuthContext from '@/context/auth/authContext';
+
 export default function ProfilePage() {
   const { user, loading, checkUserAuthentication } = useAuth();
+  // Patch: Get setUser from AuthContext
+  const authCtx = useContext(AuthContext);
   const router = useRouter();
   const [formData, setFormData] = useState({
     profileImage: '',
@@ -50,41 +56,32 @@ export default function ProfilePage() {
         setError('Please select an image file');
         return;
       }
-      
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         setError('File size exceeds 5MB limit');
         return;
       }
-      
-      // Show loading state
       setMessage('Uploading image...');
-      
       const formData = new FormData();
       formData.append('image', file);
-      
       try {
         const response = await fetch('/api/upload', {
           method: 'POST',
           body: formData,
           credentials: 'include'
         });
-        
         const result = await response.json();
-        
-        if (result.success) {
+        if (result.imageUrl) {
           setImagePreview(result.imageUrl);
           setFormData(prev => ({
             ...prev,
             profileImage: result.imageUrl
           }));
           setMessage('Image uploaded successfully!');
-          setError(''); // Clear any previous error
-          
-          // Clear message after 2 seconds
+          setError('');
           setTimeout(() => setMessage(''), 2000);
         } else {
-          setError(result.message || 'Failed to upload image');
+          setError(result.error || result.message || 'Failed to upload image');
         }
       } catch (err) {
         setError('An error occurred while uploading the image');
@@ -118,7 +115,7 @@ export default function ProfilePage() {
 
       if (data.success) {
         setMessage('Profile updated successfully!');
-        
+
         // Update form data to reflect the changes immediately
         setFormData({
           profileImage: data.user.profileImage,
@@ -127,23 +124,26 @@ export default function ProfilePage() {
           bio: data.user.bio,
           location: data.user.location
         });
-        
+
         // Update image preview
         setImagePreview(data.user.profileImage);
-        
-        // Refresh user data from the server to ensure we have the latest data in context
+
+        // Patch: Update user context immediately for instant UI reflection
+        if (authCtx && typeof authCtx.setUser === 'function') {
+          authCtx.setUser(prev => ({ ...prev, ...data.user }));
+        }
+
+        // Optionally, still refresh user data from the server
         if (checkUserAuthentication) {
           await checkUserAuthentication();
         }
-        
+
         setTimeout(() => {
           setIsEditing(false);
         }, 500);
-        
+
         setTimeout(() => {
           setMessage(''); // Clear message
-          // Optionally redirect after update
-          // router.push('/'); // Redirect to home page after successful update
         }, 2000);
       } else {
         setError(data.message || 'Failed to update profile');
@@ -201,16 +201,19 @@ export default function ProfilePage() {
           <div className="p-6 md:p-10">
             <h1 className="text-3xl md:text-4xl font-extrabold text-center text-[color:var(--foreground)] mb-8 tracking-tight">Profile</h1>
 
-            {message && (
-              <div className="fixed bottom-4 right-4 p-4 bg-green-500 text-white rounded-xl shadow-2xl z-50 animate-fade-in">
-                {message}
-              </div>
-            )}
-            {error && (
-              <div className="fixed bottom-4 right-4 p-4 bg-red-500 text-white rounded-xl shadow-2xl z-50 animate-fade-in">
-                {error}
-              </div>
-            )}
+            {/* Toast notifications - always bottom right, above all content */}
+            <div className="pointer-events-none fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-2">
+              {message && (
+                <div className="pointer-events-auto min-w-[220px] px-5 py-3 bg-green-500 text-white rounded-xl shadow-2xl font-semibold text-base animate-fade-in">
+                  {message}
+                </div>
+              )}
+              {error && (
+                <div className="pointer-events-auto min-w-[220px] px-5 py-3 bg-red-500 text-white rounded-xl shadow-2xl font-semibold text-base animate-fade-in">
+                  {error}
+                </div>
+              )}
+            </div>
 
             {!isEditing ? (
               <div className="space-y-8">

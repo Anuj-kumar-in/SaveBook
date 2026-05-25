@@ -210,6 +210,7 @@ const AuthProvider = ({ children }) => {
       logout,
       checkUserAuthentication,
       getMasterKey,
+      setUser, // Expose setUser for instant UI updates
     }}>
       {children}
     </AuthContext.Provider>

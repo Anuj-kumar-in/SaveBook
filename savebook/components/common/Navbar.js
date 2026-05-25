@@ -95,7 +95,17 @@ export default function Navbar() {
 
   const navLinkClass = "text-sm font-medium text-[color:var(--muted)] hover:text-[color:var(--foreground)]";
 
-  const initials = user?.username?.charAt(0)?.toUpperCase() || "U";
+
+  // Show profile image if available, otherwise initials
+  const profileAvatar = user?.profileImage
+    ? (
+        <img
+          src={user.profileImage}
+          alt={user?.username || "Profile"}
+          className="w-11 h-11 rounded-full object-cover border border-[var(--border)]"
+        />
+      )
+    : (user?.username?.charAt(0)?.toUpperCase() || "U");
 
   return (
     <nav className={navSurface}>
@@ -126,14 +136,15 @@ export default function Navbar() {
             <div className="h-11 w-11 rounded-full border border-[var(--border)] bg-[color:var(--background-elevated)] animate-pulse" />
           ) : isAuthenticated ? (
             <div className="relative" ref={desktopDropdownRef}>
+
               <button
                 type="button"
                 onClick={() => setDropdownOpen((open) => !open)}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border)] bg-gradient-to-br from-sky-500 via-blue-500 to-violet-500 text-sm font-semibold text-white shadow-[0_20px_44px_rgba(59,130,246,0.3)]"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border)] bg-gradient-to-br from-sky-500 via-blue-500 to-violet-500 text-sm font-semibold text-white shadow-[0_20px_44px_rgba(59,130,246,0.3)] overflow-hidden"
                 aria-label="Open user menu"
                 aria-expanded={dropdownOpen}
               >
-                {initials}
+                {profileAvatar}
               </button>
 
               {dropdownOpen && (
